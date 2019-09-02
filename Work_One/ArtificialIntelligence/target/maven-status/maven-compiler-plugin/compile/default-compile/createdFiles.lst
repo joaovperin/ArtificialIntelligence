@@ -1,3 +1,11 @@
-br/feevale/jpe/ai/core/Vertex.class
+br/feevale/jpe/ai/utils/Debug.class
+br/feevale/jpe/ai/ninepc/NinePiecesPuzzleV1.class
 br/feevale/jpe/ai/Main.class
+br/feevale/jpe/ai/ninepc/NinePiecesPuzzleV2$GameState.class
+br/feevale/jpe/ai/ninepc/NinePiecesPuzzleV1$Piece.class
+br/feevale/jpe/ai/ninepc/NinePiecesPuzzleV2.class
 br/feevale/jpe/ai/tst/ExtensionFinder.class
+br/feevale/jpe/ai/core/BinaryTreeVertex.class
+br/feevale/jpe/ai/ninepc/NinePiecesPuzzleV1$Game.class
+br/feevale/jpe/ai/core/Vertex.class
+br/feevale/jpe/ai/ninepc/NinePiecesPuzzleV2$Piece.class
