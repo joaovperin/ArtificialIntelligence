@@ -6,6 +6,8 @@
 package br.feevale.jpe.ai.ninepc;
 
 import br.feevale.jpe.ai.utils.Debug;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,8 +21,13 @@ public class NinePiecesPuzzleV2 implements Runnable {
 
     @Override
     public void run() {
-        var g = GameState.sampleTwo ();
-        g.print();
+        final long size = (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2) + 1;
+        List<GameState> states = new ArrayList<>(9);
+
+        final var initialState = GameState.sampleTwo();
+        System.out.println("INITIAL STATE:");
+        initialState.print();
+
     }
 
 //    private class Game {}
