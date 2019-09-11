@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.feevale.jpe.ai.ninepc;
+package br.feevale.jpe.ai.ninepc.v2;
 
 /**
- * A helper class to create arrays of possibilities for a state
  *
  * @author joaovperin
  */
@@ -17,8 +16,8 @@ public class StateFinder {
     // 6 7 8
     public static final GameState[] zeroEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(0, 1),
-            sample.createChild().swap(0, 3)
+            sample.clone().swap(0, 1),
+            sample.clone().swap(0, 3)
         };
     }
 
@@ -27,9 +26,9 @@ public class StateFinder {
     // 6 7 8
     public static final GameState[] oneEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(1, 0),
-            sample.createChild().swap(1, 2),
-            sample.createChild().swap(1, 4)
+            sample.clone().swap(1, 0),
+            sample.clone().swap(1, 2),
+            sample.clone().swap(1, 4)
         };
     }
 
@@ -38,8 +37,8 @@ public class StateFinder {
     // 6 7 8
     public static final GameState[] twoEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(2, 1),
-            sample.createChild().swap(2, 5)
+            sample.clone().swap(2, 1),
+            sample.clone().swap(2, 5)
         };
     }
 
@@ -48,9 +47,9 @@ public class StateFinder {
     // 6 7 8
     public static final GameState[] threeEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(3, 0),
-            sample.createChild().swap(3, 4),
-            sample.createChild().swap(3, 6)
+            sample.clone().swap(3, 0),
+            sample.clone().swap(3, 4),
+            sample.clone().swap(3, 6)
         };
     }
 
@@ -59,10 +58,10 @@ public class StateFinder {
     // 6 7 8
     public static final GameState[] fourEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(4, 1),
-            sample.createChild().swap(4, 7),
-            sample.createChild().swap(4, 3),
-            sample.createChild().swap(4, 5)
+            sample.clone().swap(4, 1),
+            sample.clone().swap(4, 7),
+            sample.clone().swap(4, 3),
+            sample.clone().swap(4, 5)
         };
     }
 
@@ -71,9 +70,9 @@ public class StateFinder {
     // 6 7 8
     public static final GameState[] fiveEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(5, 3),
-            sample.createChild().swap(5, 8),
-            sample.createChild().swap(5, 4)
+            sample.clone().swap(5, 3),
+            sample.clone().swap(5, 8),
+            sample.clone().swap(5, 4)
         };
     }
 
@@ -82,8 +81,8 @@ public class StateFinder {
     // x 7 8
     public static final GameState[] sixEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(6, 3),
-            sample.createChild().swap(6, 7)
+            sample.clone().swap(6, 3),
+            sample.clone().swap(6, 7)
         };
     }
 
@@ -92,9 +91,9 @@ public class StateFinder {
     // 6 x 8
     public static final GameState[] sevenEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(7, 4),
-            sample.createChild().swap(7, 6),
-            sample.createChild().swap(7, 8)
+            sample.clone().swap(7, 4),
+            sample.clone().swap(7, 6),
+            sample.clone().swap(7, 8)
         };
     }
 
@@ -103,8 +102,8 @@ public class StateFinder {
     // 6 7 x
     public static final GameState[] eightEmpty(GameState sample) {
         return new GameState[]{
-            sample.createChild().swap(8, 7),
-            sample.createChild().swap(8, 5)
+            sample.clone().swap(8, 7),
+            sample.clone().swap(8, 5)
         };
     }
 

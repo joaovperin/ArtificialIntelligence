@@ -8,47 +8,70 @@ package br.feevale.jpe.ai.ninepc;
 import br.feevale.jpe.ai.utils.Debug;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
+ * The heart of the puzzle
  *
  * @author joaovperin
  */
-public class NinePiecesPuzzle implements Runnable {
+public class NinePiecesPuzzle {
 
+    /** A calc to count the number of possibilities */
     private static final int POSSIBLE_MAX_SIZE = (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2) + 1;
+
+    /** An array with all the states tried so far */
     private final List<GameState> soFar;
 
+    /**
+     * Main application's entry point
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        new NinePiecesPuzzle().run();
+        // Runs the search with no information
+        new NinePiecesPuzzle().searchWithNoInformation();
     }
 
+    /**
+     * The constructor of the class
+     */
     public NinePiecesPuzzle() {
         this.soFar = new ArrayList<>(POSSIBLE_MAX_SIZE);
     }
 
-    @Override
-    public void run() {
-        final var initialState = GameStateSamples.sampleThree();
+    /**
+     * Algorithm implementation - search with no information
+     */
+    public void searchWithNoInformation() {
+        final var initialState = GameStateSamples.sampleFive();
         final Queue<GameState> states = new ConcurrentLinkedQueue<>();
         states.add(initialState);
+        soFar.add(initialState);
 
-        System.out.println("INITIAL STATE:");
+        System.out.println("****** INITIAL STATE:");
         initialState.print();
 
-        long count = 0;
+        // A simple counter to track how many iterations we need to reach the state
+        int count = 0;
 
         GameState current;
         do {
             // Get's one state from the queue
             current = states.poll();
-//            Debug.println("Processing state: " + ++count);
-//            Debug.println(current.toString());
+            // HEY! IF YOU WANT TO SEE WHAT'S HAPPENNING,
+            //...just SET DEBUG TO TRUE 
+            Debug.ON = true;
+            Debug.println("* Processing iteration: " + ++count);
+            Debug.println(current.toString());
 
             // Checks if finished
             if (current.isDone()) {
-                System.out.println("Solution Found on state " + count + "!");
+                System.out.println("****** Solution Found on iteration " + count + "!");
+                System.out.println("****** Printing the solution graph...");
+                printSolutionGraph(current);
                 break;
             }
 
@@ -70,4 +93,30 @@ public class NinePiecesPuzzle implements Runnable {
 
     }
 
+    /**
+     * Print the decision graph that reached the result.
+     *
+     * @param lastNode
+     */
+    private void printSolutionGraph(GameState lastNode) {
+        // A list with the states
+        final List<GameState> list = new ArrayList<>();
+        list.add(lastNode);
+        // Iterates from the last node
+        GameState current = lastNode;
+        while (true) {
+            final int parentId = current.getParentId();
+            Optional<GameState> optional = soFar.stream().filter(e -> e.getId() == parentId).findFirst();
+            // If it's the end
+            if (optional.isEmpty()) {
+                break;
+            }
+            current = optional.get();
+            list.add(current);
+        }
+        // Prints all elements
+        list.stream().
+                sorted((e1, e2) -> e1.getId() - e2.getId()).
+                forEach(System.out::println);
+    }
 }
