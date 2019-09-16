@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author joaovperin
  */
-public class NinePiecesPuzzle implements Runnable {
+public class NinePiecesPuzzleSearchWithInformation implements Runnable {
 
     /** A calc to count the number of possibilities */
     private static final int POSSIBLE_MAX_SIZE = (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2) + 1;
@@ -31,13 +31,13 @@ public class NinePiecesPuzzle implements Runnable {
      */
     public static void main(String[] args) {
         // Runs the search with no information
-        new NinePiecesPuzzle().run();
+        new NinePiecesPuzzleSearchWithInformation().run();
     }
 
     /**
      * The constructor of the class
      */
-    public NinePiecesPuzzle() {
+    public NinePiecesPuzzleSearchWithInformation() {
         this.soFar = new ArrayList<>(POSSIBLE_MAX_SIZE);
     }
 
@@ -63,7 +63,7 @@ public class NinePiecesPuzzle implements Runnable {
             current = states.poll();
             // HEY! IF YOU WANT TO SEE WHAT'S HAPPENNING,
             //...just SET DEBUG TO TRUE
-            Debug.ON = true;
+            Debug.ON = false;
             Debug.println("* Processing iteration: " + ++count);
             Debug.println(current.toString());
 
@@ -77,12 +77,20 @@ public class NinePiecesPuzzle implements Runnable {
 
             // Adds the new possibilities on the list
             GameState[] possibleStates = current.getPossibleStates();
+            List<GameState> filteredList = new ArrayList<>();
             for (GameState st : possibleStates) {
                 if (!soFar.contains(st)) {
-                    soFar.add(st);
-                    states.add(st);
+                    filteredList.add(st);
                 }
             }
+
+            // Calculate the weight to put order on this
+            filteredList.forEach(st -> calculateWeight(st));
+            filteredList.sort((st1, st2) -> st1.getWeight() - st2.getWeight());
+            filteredList.forEach(st -> {
+                soFar.add(st);
+                states.add(st);
+            });
 
             // Checks if it does not have a solution
             if (states.isEmpty()) {
@@ -91,6 +99,16 @@ public class NinePiecesPuzzle implements Runnable {
             // Loops until it's solved or reached an invalid state
         } while (true);
 
+    }
+
+    /**
+     * Calculates the weight of the solution
+     *
+     * @param st
+     */
+    private void calculateWeight(GameState st) {
+        // TO-DO: Calculate that.
+        st.setWeight(3);
     }
 
     /**

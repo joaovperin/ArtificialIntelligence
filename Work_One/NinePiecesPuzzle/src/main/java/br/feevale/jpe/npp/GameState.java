@@ -6,6 +6,7 @@
 package br.feevale.jpe.npp;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A class of objects that represents an Game State
@@ -13,6 +14,9 @@ import java.util.Arrays;
  * @author joaovperin
  */
 public class GameState {
+
+    /** Default weight of uncalculated weights */
+    private static final Integer WEIGHT_UNCALCULATED = -1;
 
     /** A static instance counter to let me count the achieved states */
     private static int idCounter = 1;
@@ -23,6 +27,8 @@ public class GameState {
     private final int id;
     /** The pieces organization */
     private final Piece[] pieces;
+    /** Weight of the solution */
+    private Integer weight;
 
     /** A copy of the state of a done game */
     private static final GameState DONE_STATE;
@@ -48,6 +54,7 @@ public class GameState {
         this.id = idCounter++;
         this.parentId = parentId;
         this.pieces = pieces;
+        this.weight = WEIGHT_UNCALCULATED;
     }
 
     /**
@@ -199,6 +206,27 @@ public class GameState {
      */
     public final int getId() {
         return id;
+    }
+
+    /**
+     * Returns the weight of the solution
+     *
+     * @return Long
+     */
+    public final Integer getWeight() {
+        if (WEIGHT_UNCALCULATED.equals(weight) || Objects.isNull(weight)) {
+            throw new IllegalStateException("Cannot get the weight if because it wasn't calculated yet.");
+        }
+        return weight;
+    }
+
+    /**
+     * Defines the weight of the solution
+     *
+     * @param weight
+     */
+    public final void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     /**
