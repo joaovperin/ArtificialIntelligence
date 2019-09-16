@@ -45,7 +45,7 @@ public class NinePiecesPuzzle {
      * Algorithm implementation - search with no information
      */
     public void searchWithNoInformation() {
-        final var initialState = GameStateSamples.sampleFive();
+        final GameState initialState = GameStateSamples.sampleFive();
         final Queue<GameState> states = new ConcurrentLinkedQueue<>();
         states.add(initialState);
         soFar.add(initialState);
@@ -61,7 +61,7 @@ public class NinePiecesPuzzle {
             // Get's one state from the queue
             current = states.poll();
             // HEY! IF YOU WANT TO SEE WHAT'S HAPPENNING,
-            //...just SET DEBUG TO TRUE 
+            //...just SET DEBUG TO TRUE
             Debug.ON = true;
             Debug.println("* Processing iteration: " + ++count);
             Debug.println(current.toString());
@@ -76,7 +76,7 @@ public class NinePiecesPuzzle {
 
             // Adds the new possibilities on the list
             GameState[] possibleStates = current.getPossibleStates();
-            for (var st : possibleStates) {
+            for (GameState st : possibleStates) {
                 if (!soFar.contains(st)) {
                     soFar.add(st);
                     states.add(st);
@@ -107,7 +107,7 @@ public class NinePiecesPuzzle {
             final int parentId = current.getParentId();
             Optional<GameState> optional = soFar.stream().filter(e -> e.getId() == parentId).findFirst();
             // If it's the end
-            if (optional.isEmpty()) {
+            if (!optional.isPresent()) {
                 break;
             }
             current = optional.get();
