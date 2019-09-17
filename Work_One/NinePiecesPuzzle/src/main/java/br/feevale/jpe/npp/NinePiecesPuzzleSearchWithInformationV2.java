@@ -12,7 +12,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * The heart of the puzzle - Search with no information
+ * The heart of the puzzle - Search with some information
  *
  * @author joaovperin
  */
@@ -31,7 +31,10 @@ public class NinePiecesPuzzleSearchWithInformationV2 implements Runnable {
      */
     public static void main(String[] args) {
         // Runs the search with no information
+        long before = System.currentTimeMillis();
         new NinePiecesPuzzleSearchWithInformationV2().run();
+        long after = System.currentTimeMillis();
+        System.out.printf("Time elapsed: %4d ms.\n", (after - before));
     }
 
     /**

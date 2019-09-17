@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * The heart of the puzzle - Search with no information
+ * The heart of the puzzle - Search with a little more information than V2 (still has to be done)
  *
  * @author joaovperin
  */
