@@ -7,6 +7,7 @@ package br.feevale.jpe.npp;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * A class of objects that represents an Game State
@@ -31,7 +32,7 @@ public class GameState {
     private Integer weight;
 
     /** A copy of the state of a done game */
-    private static final GameState DONE_STATE;
+    public static final GameState DONE_STATE;
 
     /**
      * Static constructor to create a sample of the done state
@@ -102,14 +103,14 @@ public class GameState {
      *
      * @return int
      */
-    private int findEmptyPosition() {
+    public final int findEmptyPosition() {
         // Starts looking at the 1st position
         for (int i = 1; i < pieces.length; i++) {
             if (pieces[i].isEmptyPiece()) {
                 return i;
             }
         }
-        // if not found, it's the first position
+        // If not found, it's the first position
         return 0;
     }
 
@@ -171,6 +172,15 @@ public class GameState {
      */
     public final GameState setEmpty(int index) {
         return this.set(index, 0);
+    }
+
+    /**
+     * Returns a Stream from the piece array
+     *
+     * @return Stream<Piece>
+     */
+    public final Stream<Piece> pieces() {
+        return Arrays.stream(pieces);
     }
 
     /**
