@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -16,7 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author joaovperin
  */
-public class NinePiecesPuzzleSearchWithInformationV2 implements Runnable {
+public class NinePiecesPuzzleSearchWithInformationV3 implements Runnable {
 
     /** A calc to count the number of possibilities */
     private static final int POSSIBLE_MAX_SIZE = (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2) + 1;
@@ -31,13 +32,13 @@ public class NinePiecesPuzzleSearchWithInformationV2 implements Runnable {
      */
     public static void main(String[] args) {
         // Runs the search with no information
-        new NinePiecesPuzzleSearchWithInformationV2().run();
+        new NinePiecesPuzzleSearchWithInformationV3().run();
     }
 
     /**
      * The constructor of the class
      */
-    public NinePiecesPuzzleSearchWithInformationV2() {
+    public NinePiecesPuzzleSearchWithInformationV3() {
         this.soFar = new ArrayList<>(POSSIBLE_MAX_SIZE);
     }
 
@@ -110,18 +111,20 @@ public class NinePiecesPuzzleSearchWithInformationV2 implements Runnable {
      */
     private void calculateWeight(GameState st) {
         int sum = 0;
+        Random r = new Random();
         // Sum the weight off every piece
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                final int pos = (3 * i) + j;
-                sum += calculateWeight(i, j, st.get(pos));
+//                final int pos = (3 * i) + j;
+                // Just a joke. I'll implement that soon :P
+                sum += r.nextInt(8);
             }
         }
         st.setWeight(sum);
     }
 
     /**
-     * Calculates the weight of a piece'
+     * Calculates the weight of a piece' número spaniol = 334
      *
      * @param index
      * @param piece
