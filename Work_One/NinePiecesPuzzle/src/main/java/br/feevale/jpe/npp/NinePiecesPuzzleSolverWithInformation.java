@@ -7,38 +7,17 @@ package br.feevale.jpe.npp;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * The heart of the puzzle - Search with no information
  *
  * @author joaovperin
  */
-public class NinePiecesPuzzleSearchWithInformationV1 implements Runnable {
+public class NinePiecesPuzzleSolverWithInformation extends AbstractNinePiecesPuzzleSolver {
 
-    /** A calc to count the number of possibilities */
-    private static final int POSSIBLE_MAX_SIZE = (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2) + 1;
-
-    /** An array with all the states tried so far */
-    private final List<GameState> soFar;
-
-    /**
-     * Main application's entry point
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        // Runs the search with no information
-        new NinePiecesPuzzleSearchWithInformationV1().run();
-    }
-
-    /**
-     * The constructor of the class
-     */
-    public NinePiecesPuzzleSearchWithInformationV1() {
-        this.soFar = new ArrayList<>(POSSIBLE_MAX_SIZE);
+    public NinePiecesPuzzleSolverWithInformation(GameState initialState) {
+        super(initialState);
     }
 
     /**
@@ -63,7 +42,6 @@ public class NinePiecesPuzzleSearchWithInformationV1 implements Runnable {
             current = states.poll();
             // HEY! IF YOU WANT TO SEE WHAT'S HAPPENNING,
             //...just SET DEBUG TO TRUE
-            Debug.ON = false;
             Debug.println("* Processing iteration: " + ++count);
             Debug.println(current.toString());
 
@@ -87,7 +65,6 @@ public class NinePiecesPuzzleSearchWithInformationV1 implements Runnable {
 
             // Calculate the weight to put order on this
             filteredList.stream()
-                    .parallel()
                     .peek(st -> calculateWeight(st))
                     .sorted((st1, st2) -> st1.getWeight() - st2.getWeight())
                     .forEach(st -> {
@@ -110,37 +87,28 @@ public class NinePiecesPuzzleSearchWithInformationV1 implements Runnable {
      * @param st
      */
     private void calculateWeight(GameState st) {
-        final int i0 = st.findEmptyPosition();
-        // Weight = difference between empty position 
-        final int weight = Math.abs(i0 - st.get(0).value);
-        st.setWeight(weight);
+        int sum = 0;
+        // Sum the weight off every piece
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                final int pos = (3 * i) + j;
+                sum += calculateWeight(i, j, st.get(pos));
+            }
+        }
+        st.setWeight(sum);
     }
 
     /**
-     * Print the decision graph that reached the result.
+     * Calculates the weight of a piece'
      *
-     * @param lastNode
+     * @param index
+     * @param piece
+     * @return int
      */
-    private void printSolutionGraph(GameState lastNode) {
-        // A list with the states
-        final List<GameState> list = new ArrayList<>();
-        list.add(lastNode);
-        // Iterates from the last node
-        GameState current = lastNode;
-        while (true) {
-            final int parentId = current.getParentId();
-            Optional<GameState> optional = soFar.stream().filter(e -> e.getId() == parentId).findFirst();
-            // If it's the end
-            if (!optional.isPresent()) {
-                break;
-            }
-            current = optional.get();
-            list.add(current);
-        }
-        // Prints all elements
-        list.stream().
-                sorted((e1, e2) -> e1.getId() - e2.getId()).
-                forEach(System.out::println);
-        System.out.println("****** Number of useful changes to complete the puzzle: " + (list.size() - 1) + "!");
+    private int calculateWeight(int i, int j, Piece piece) {
+        int row = (piece.value - 1) / 3;
+        int column = (piece.value - 1) % 3;
+        return Math.abs(i - row) + Math.abs(column - j);
     }
+
 }

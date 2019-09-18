@@ -5,6 +5,8 @@
  */
 package br.feevale.jpe.npp;
 
+import java.security.InvalidParameterException;
+
 /**
  * Game type
  */
@@ -22,7 +24,13 @@ public enum GameType {
     }
 
     public static final GameType fromInput(String input) {
-        return GameType.TYPE_INFORMATION;
+        int intinput = Integer.parseInt(input);
+        for (GameType t : values()) {
+            if (t.type == intinput) {
+                return t;
+            }
+        }
+        throw new InvalidParameterException("Invalid GameType solver! Please see the help");
     }
 
 }
