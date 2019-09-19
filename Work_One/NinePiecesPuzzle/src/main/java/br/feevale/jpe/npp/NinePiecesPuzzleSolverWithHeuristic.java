@@ -11,12 +11,18 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
+ * A puzzle solver using some information
  *
  * @author joaovperin
  */
-public class NinePiecesPuzzleSolverWithInformation extends AbstractNinePiecesPuzzleSolver {
+public class NinePiecesPuzzleSolverWithHeuristic extends AbstractNinePiecesPuzzleSolver {
 
-    public NinePiecesPuzzleSolverWithInformation(GameState initialState) {
+    /**
+     * Class constructor
+     *
+     * @param initialState
+     */
+    public NinePiecesPuzzleSolverWithHeuristic(GameState initialState) {
         super(initialState);
     }
 
@@ -25,7 +31,6 @@ public class NinePiecesPuzzleSolverWithInformation extends AbstractNinePiecesPuz
      */
     @Override
     public void run() {
-        final GameState initialState = GameStateSamples.sampleFive();
         final Queue<GameState> states = new ConcurrentLinkedQueue<>();
         states.add(initialState);
         soFar.add(initialState);
@@ -88,11 +93,11 @@ public class NinePiecesPuzzleSolverWithInformation extends AbstractNinePiecesPuz
      */
     private void calculateWeight(GameState st) {
         int sum = 0;
-        // Sum the weight off every piece
+        // Sum the weight of every piece
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 final int pos = (3 * i) + j;
-                sum += calculateWeight(i, j, st.get(pos));
+                sum += (calculateWeight(i, j, st.get(pos)) == 0 ? 0 : 1);
             }
         }
         st.setWeight(sum);

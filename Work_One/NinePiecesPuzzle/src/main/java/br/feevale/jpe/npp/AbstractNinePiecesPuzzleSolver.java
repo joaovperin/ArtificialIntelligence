@@ -10,18 +10,23 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
- * @author joaovperin
+ * Abstract class for my puzzle solvers
  */
-public abstract class AbstractNinePiecesPuzzleSolver implements Runnable {
+public abstract class AbstractNinePiecesPuzzleSolver implements NinePiecesPuzzleSolver {
 
     /** A calc to count the number of possibilities */
     protected static final int MAX_POSSIBLE_SIZE = (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2) + 1;
 
     /** An array with all the states tried so far */
     protected List<GameState> soFar;
+    /** Initial state */
     protected final GameState initialState;
 
+    /**
+     * Class constructor
+     *
+     * @param initialState
+     */
     public AbstractNinePiecesPuzzleSolver(GameState initialState) {
         this.soFar = new ArrayList<>(MAX_POSSIBLE_SIZE);
         this.initialState = initialState;

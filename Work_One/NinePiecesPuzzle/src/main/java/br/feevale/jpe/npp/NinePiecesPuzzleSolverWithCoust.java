@@ -5,32 +5,32 @@
  */
 package br.feevale.jpe.npp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * A puzzle solver using brute force
+ * A puzzle solver using some information
  *
  * @author joaovperin
  */
-public final class NinePiecesPuzzleSolverBruteForce extends AbstractNinePiecesPuzzleSolver {
+public class NinePiecesPuzzleSolverWithCoust extends AbstractNinePiecesPuzzleSolver {
 
     /**
      * Class constructor
      *
      * @param initialState
      */
-    public NinePiecesPuzzleSolverBruteForce(GameState initialState) {
+    public NinePiecesPuzzleSolverWithCoust(GameState initialState) {
         super(initialState);
     }
 
     /**
-     * Algorithm implementation - search with no information (almost a brute
-     * force)
+     * Algorithm implementation - search with no information
      */
     @Override
     public void run() {
-
         final Queue<GameState> states = new ConcurrentLinkedQueue<>();
         states.add(initialState);
         soFar.add(initialState);
@@ -61,12 +61,21 @@ public final class NinePiecesPuzzleSolverBruteForce extends AbstractNinePiecesPu
 
             // Adds the new possibilities on the list
             GameState[] possibleStates = current.getPossibleStates();
+            List<GameState> filteredList = new ArrayList<>();
             for (GameState st : possibleStates) {
                 if (!soFar.contains(st)) {
-                    soFar.add(st);
-                    states.add(st);
+                    filteredList.add(st);
                 }
             }
+
+            // Calculate the weight to put order on this
+            filteredList.stream()
+                    .peek(st -> calculateWeight(st))
+                    .sorted((st1, st2) -> st1.getWeight() - st2.getWeight())
+                    .forEach(st -> {
+                        soFar.add(st);
+                        states.add(st);
+                    });
 
             // Checks if it does not have a solution
             if (states.isEmpty()) {
@@ -75,6 +84,36 @@ public final class NinePiecesPuzzleSolverBruteForce extends AbstractNinePiecesPu
             // Loops until it's solved or reached an invalid state
         } while (true);
 
+    }
+
+    /**
+     * Calculates the weight of the solution
+     *
+     * @param st
+     */
+    private void calculateWeight(GameState st) {
+        int sum = 0;
+        // Sum the weight of every piece
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                final int pos = (3 * i) + j;
+                sum += calculateWeight(i, j, st.get(pos));
+            }
+        }
+        st.setWeight(sum);
+    }
+
+    /**
+     * Calculates the weight of a piece'
+     *
+     * @param index
+     * @param piece
+     * @return int
+     */
+    private int calculateWeight(int i, int j, Piece piece) {
+        int row = (piece.value - 1) / 3;
+        int column = (piece.value - 1) % 3;
+        return Math.abs(i - row) + Math.abs(column - j);
     }
 
 }

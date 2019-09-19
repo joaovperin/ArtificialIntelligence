@@ -32,7 +32,7 @@ public class NinePiecesPuzzle {
          * 3, 0, 8
          */
         // Test stuff
-//        args = "--type=2 -p 6 1 4 7 5 2 3 0 8".split(" ");
+//        args = "--type=1 -p 6 1 4 7 5 2 3 0 8".split(" ");
         // Calls help if not provided any args
         if (args == null || args.length == 0) {
             showHelp();
@@ -47,11 +47,12 @@ public class NinePiecesPuzzle {
     }
 
     /**
-     * The constructor of the class
+     * Creates a instance of puzzle solver using cmd-line received args
      *
      * @param args Command line args
+     * @return NinePiecesPuzzleSolver
      */
-    public static final AbstractNinePiecesPuzzleSolver create(String[] args) {
+    public static final NinePiecesPuzzleSolver create(String[] args) {
 
         // default game type
         GameType type = GameType.TYPE_NO_INFORMATION;
@@ -77,8 +78,8 @@ public class NinePiecesPuzzle {
                     // Interactive mode
                     case "-it":
                     case "--interactive":
-                        System.out.println("Interactive mode not implemented (yet).");
-                        continue;
+                        throw new InvalidParameterException("Interactive mode not implemented (yet).");
+//                        return createInteractively();
                     // Selects the type of the algorithm
                     case "-t":
                     case "--type":
@@ -115,10 +116,23 @@ public class NinePiecesPuzzle {
             return new NinePiecesPuzzleSolverBruteForce(initialState);
         }
         // Search with information
-        if (GameType.TYPE_INFORMATION.equals(type)) {
-            return new NinePiecesPuzzleSolverWithInformation(initialState);
+        if (GameType.TYPE_INFORMATION_COST.equals(type)) {
+            return new NinePiecesPuzzleSolverWithCoust(initialState);
+        }
+        // Search with information
+        if (GameType.TYPE_INFORMATION_HEURISTIC.equals(type)) {
+            return new NinePiecesPuzzleSolverWithHeuristic(initialState);
         }
         throw new IllegalArgumentException("Could not find a suitable game solver! Sorry.");
+    }
+
+    /**
+     * Creates a instance of puzzle solver interactively
+     *
+     * @return NinePiecesPuzzleSolver
+     */
+    private static final NinePiecesPuzzleSolver createInteractively() {
+        return new NinePiecesPuzzleSolverWithCoust(GameStateSamples.sampleFive());
     }
 
     /**
